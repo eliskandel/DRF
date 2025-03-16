@@ -1,18 +1,18 @@
-from ..models import Movie
+from ..models import Platform,WatchList
 # from rest_framework.decorators import api_view
 from rest_framework.views import APIView 
 from rest_framework import status
 from rest_framework.response import Response
-from .serializers import MovieSerializer
+from .serializers import WatchListSerializer,PlatformSerializer
 
 
-class MovieList(APIView):
+class WatchListView(APIView):
     def get(self, request):
-        movie=Movie.objects.all()
-        serializer=MovieSerializer(movie, many=True)
+        watchList=WatchList.objects.all()
+        serializer=WatchListSerializer(watchList, many=True)
         return Response(serializer.data)
     def post(self, request):
-        serializer=MovieSerializer(data=request.data)
+        serializer=WatchListSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -20,26 +20,26 @@ class MovieList(APIView):
             print(serializer.errors)
             return Response(serializer.errors)
 
-class MovieDetail(APIView):
+class WatchListDetailView(APIView):
     def get(self,request,pk):
         try:
-            movie=Movie.objects.get(pk=pk)
-            serializer=MovieSerializer(movie)
+            watchList=WatchList.objects.get(pk=pk)
+            serializer=WatchListSerializer(watchList)
             return Response(serializer.data)
         except:
             return Response({"message":"Not Found"})
     
     def delete(self,request,pk):
         try:
-            movie=Movie.objects.get(pk=pk)
-            movie.delete()
+            watchList=WatchList.objects.get(pk=pk)
+            watchList.delete()
             return Response({"message":"Deleted"})
         except:
             return Response({"message":"Not Found WitH given Id"})
         
     def put(self,request,pk):
-        movie=Movie.objects.get(pk=pk)
-        serializer=MovieSerializer(movie, data=request.data)
+        watchList=WatchList.objects.get(pk=pk)
+        serializer=WatchListSerializer(watchList, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -47,11 +47,53 @@ class MovieDetail(APIView):
             return Response({"message":"Hello"})
 
 
+
+class PlatformView(APIView):
+    def get(self, request):
+        platform=Platform.objects.all()
+        serializer=PlatformSerializer(platform,many=True)
+        return Response(serializer.data)
+    def post(self,request):
+        serializer=PlatformSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+class PlatformDetailView(APIView):
+    def get(self, request, pk):
+        try:
+            platform=Platform.objects.get(pk=pk)
+            serializer=PlatformSerializer(platform)
+            return Response(serializer.data)
+        except:
+            return Response({"message":"Not ffound"})
+    def put(self, request, pk):
+        try:
+            platform=Platform.objects.get(pk=pk)
+            serializer=PlatformSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response({"message":"Please enter validated data"})
+        except:
+            return Response({"message":"Not ffound"})
+    def delete(self,request,pk):
+        try:
+            platform=Platform.objects.get(pk=pk)
+            platform.delete()
+            return Response({"message":"Deleted"})
+        except:
+            return Response({"message":"Not ffound"})
+
+
+
 # Create your views here.
 # @api_view(['GET','POST'])
-# def movie_list(request):
+# def WatchList_list(request):
 #     if request.method == 'GET':
-#         movies=Movie.objects.all()
+#         WatchLists=WatchList.objects.all()
 #         serializer=MovieSerializer(movies,many=True)
 #         return Response(serializer.data)
 #     if request.method == "POST":

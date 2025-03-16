@@ -1,10 +1,16 @@
 from rest_framework import serializers
-from ..models import WatchList
+from ..models import WatchList, Platform
 
 class WatchListSerializer(serializers.ModelSerializer):
-    # length=serializers.SerializerMethodField()
+    
     class Meta:
         model=WatchList
+        fields='__all__'
+
+
+class PlatformSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Platform
         fields='__all__'
         # exclude=['active']
         # fields=['id','name', 'description']\
